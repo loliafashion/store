@@ -1,0 +1,243 @@
+<!doctype html>
+
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Lolia — معرض المجموعة</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --accent:#b8862a;
+      --text:#222;
+      --muted:#7a7a7a;
+      --bg:#f7f2ec;
+      --card:#fff;
+      --radius:14px;
+    }
+    *{box-sizing:border-box}
+    body{font-family:Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial;line-height:1.4;color:var(--text);background:var(--bg);margin:0;padding:28px}.header{display:flex;align-items:center;justify-content:space-between;gap:20px;max-width:1200px;margin:0 auto}
+.brand{display:flex;align-items:center;gap:16px}
+.brand img{width:86px;height:86px;object-fit:contain;border-radius:10px;box-shadow:0 6px 18px rgba(0,0,0,0.06)}
+.brand h1{font-family:'Playfair Display',serif;font-size:26px;margin:0;color:var(--text)}
+.brand p{margin:0;color:var(--muted);font-size:13px}
+
+.controls{display:flex;gap:12px;align-items:center}
+.search{padding:10px 14px;border:1px solid #e6e0d7;background:white;border-radius:10px;min-width:220px}
+.filter-btn{padding:10px 14px;border-radius:10px;border:1px solid #e6e0d7;background:transparent;cursor:pointer}
+
+.hero{max-width:1200px;margin:28px auto 18px;padding:28px;background:linear-gradient(180deg,rgba(255,255,255,0.6),transparent);border-radius:16px;display:flex;gap:24px;align-items:center}
+.hero .copy{flex:1}
+.hero h2{font-family:'Playfair Display',serif;font-size:34px;margin:0 0 8px}
+.hero p{margin:0;color:var(--muted)}
+.hero .cta{margin-top:12px;padding:10px 16px;border-radius:10px;background:var(--accent);color:#fff;border:none;cursor:pointer;font-weight:600}
+
+.grid{max-width:1200px;margin:18px auto;display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+@media (max-width:1024px){.grid{grid-template-columns:repeat(3,1fr)}}
+@media (max-width:720px){.grid{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:420px){.grid{grid-template-columns:1fr}}
+
+.card{background:var(--card);border-radius:12px;padding:12px;box-shadow:0 6px 20px rgba(0,0,0,0.04);overflow:hidden;display:flex;flex-direction:column;transition:transform 0.2s ease}
+.card:hover{transform:translateY(-6px)}
+.card img{width:100%;height:320px;object-fit:cover;border-radius:8px}
+.card .meta{display:flex;justify-content:space-between;align-items:center;padding-top:10px}
+.card h3{font-family:'Playfair Display',serif;margin:0;font-size:18px}
+.sku{font-size:12px;color:var(--muted)}
+
+.row{display:flex;gap:10px;align-items:center;margin-top:10px}
+.price{font-weight:700}
+.sizes{display:flex;gap:6px}
+.size{border:1px dashed #e6e0d7;padding:6px 8px;border-radius:6px;font-size:13px}
+
+.swatches{display:flex;gap:6px;align-items:center}
+.sw{width:18px;height:18px;border-radius:50%;border:1px solid rgba(0,0,0,0.06)}
+.actions{margin-top:12px;display:flex;gap:8px}
+.btn{flex:1;padding:10px;border-radius:10px;border:1px solid #e6e0d7;background:transparent;cursor:pointer}
+.btn.primary{background:var(--accent);color:white;border:none}
+
+footer{max-width:1200px;margin:30px auto;text-align:center;color:var(--muted);font-size:13px}
+
+.modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.45);display:none;align-items:center;justify-content:center;padding:20px;z-index:10}
+.modal{background:white;border-radius:12px;max-width:760px;width:100%;padding:18px;position:relative}
+.modal h4{margin:0 0 8px;font-family:'Playfair Display'}
+table{width:100%;border-collapse:collapse;margin-top:8px}
+td,th{padding:8px;border-bottom:1px solid #f0ece8;text-align:right}
+.close{position:absolute;top:12px;left:12px;background:#eee;border:none;padding:8px 12px;border-radius:8px;cursor:pointer}
+
+.tag{font-size:12px;color:var(--muted);padding:6px 8px;border-radius:8px;border:1px solid #f0ece8}
+
+/* Quantity modal */
+#quantityModal .modal{max-width:420px}
+#quantityModal label{display:block;margin:8px 0 4px}
+#quantityModal input{width:100%;padding:10px;border:1px solid #ddd;border-radius:8px}
+#quantityModal button{margin-top:14px;padding:10px 16px;border:none;border-radius:10px;cursor:pointer;font-weight:600}
+#quantityModal .confirm{background:var(--accent);color:#fff;width:100%}
+
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="brand">
+      <img src="logo.png" alt="Lolia logo" />
+      <div>
+        <h1>Lolia</h1>
+        <p>مصنع ملابس نسائية — تصاميم كلاسيكية وعصرية</p>
+      </div>
+    </div>
+    <div class="controls">
+      <input class="search" placeholder="...ابحث عن موديل أو لون" />
+      <button class="filter-btn">الكل</button>
+      <button class="filter-btn">مقاسات</button>
+      <button class="filter-btn">ألوان</button>
+    </div>
+  </header>  <section class="hero">
+    <div class="copy">
+      <h2>مجموعة Lolia الجديدة — كلاسيكية أنثوية</h2>
+      <p>معرض يضم 20 موديل مميز ملائم لمختلف المناسبات. اختر المقاس واللون، واطلع على المقاسات التفصيلية لكل موديل.</p>
+      <button class="cta" onclick="document.querySelector('.grid').scrollIntoView({behavior:'smooth'})">تسوق المعرض</button>
+    </div>
+    <div class="tag">سنة الصنع: 2025</div>
+  </section>  <main class="grid" id="catalog"></main>  <div class="modal-backdrop" id="modal">
+    <div class="modal" role="dialog" aria-modal="true">
+      <button class="close" onclick="closeModal()">إغلاق</button>
+      <h4 id="modalTitle">تفاصيل الموديل</h4>
+      <div id="modalBody"></div>
+    </div>
+  </div>  <div class="modal-backdrop" id="quantityModal">
+    <div class="modal" role="dialog" aria-modal="true">
+      <button class="close" onclick="closeQuantityModal()">إغلاق</button>
+      <h4 id="quantityTitle">تحديد الكمية</h4>
+      <label for="qtyInput">أدخل الكمية (الحد الأدنى 24)</label>
+      <input type="number" id="qtyInput" min="24" value="24">
+      <button class="confirm" onclick="confirmOrder()">تأكيد الطلب</button>
+    </div>
+  </div>  <footer>
+    © مصنع Lolia — كل الحقوق محفوظة. للتواصل: info@lolia.example
+  </footer>  <script>
+    const products = Array.from({length:20}).map((_,i)=>({
+      id: i+1,
+      name: `موديل ${i+1}`,
+      sku: `LL-${1000+i}`,
+      price: (120 + i*5),
+      image: `images/product${(i%8)+1}.jpg`,
+      sizes: ['XS','S','M','L','XL'],
+      colors:[
+        {name:'أسود',hex:'#111111'},
+        {name:'أبيض',hex:'#ffffff'},
+        {name:'بيج',hex:'#d4c2a8'},
+      ],
+      measurements:{
+        'الطول (سم)': 90 + i%10,
+        'الصدر (سم)': 84 + i%6,
+        'الخصر (سم)': 66 + i%7,
+        'الورك (سم)': 92 + i%8
+      }
+    }))
+
+    const catalog = document.getElementById('catalog')
+    let selectedProduct = null;
+
+    function render(){
+      catalog.innerHTML = ''
+      products.forEach(p => {
+        const card = document.createElement('article')
+        card.className = 'card'
+        card.innerHTML = `
+          <img src="${p.image}" alt="${p.name}" loading="lazy">
+          <div class="meta">
+            <div>
+              <h3>${p.name}</h3>
+              <div class="sku">SKU: ${p.sku}</div>
+            </div>
+            <div class="price">€ ${p.price.toFixed(2)}</div>
+          </div>
+          <div class="row">
+            <div class="sizes">${p.sizes.slice(0,4).map(s=>`<span class="size">${s}</span>`).join('')}</div>
+            <div style="margin-left:auto" class="swatches">${p.colors.map(c=>`<span title="${c.name}" class="sw" style="background:${c.hex}"></span>`).join('')}</div>
+          </div>
+          <div class="actions">
+            <button class="btn" onclick='openModal(${p.id})'>عرض المقاسات</button>
+            <button class="btn primary" onclick='openQuantityModal(${p.id})'>اطلب الآن</button>
+          </div>
+        `
+        catalog.appendChild(card)
+      })
+    }
+
+    function openModal(id){
+      const p = products.find(x=>x.id===id)
+      document.getElementById('modalTitle').textContent = `${p.name} — ${p.sku}`
+      const body = document.getElementById('modalBody')
+      body.innerHTML = `
+        <p style="color:var(--muted)">مقاسات متوفرة: ${p.sizes.join('، ')}</p>
+        <table>
+          <thead><tr><th>الوصف</th><th>القيمة</th></tr></thead>
+          <tbody>
+            ${Object.entries(p.measurements).map(([k,v])=>`<tr><td>${k}</td><td>${v}</td></tr>`).join('')}
+          </tbody>
+        </table>
+        <p style="margin-top:10px">ألوان متاحة:</p>
+        <div style="display:flex;gap:8px">${p.colors.map(c=>`<div style='display:flex;align-items:center;gap:8px'><span style='width:28px;height:20px;border-radius:6px;border:1px solid #eaeaea;background:${c.hex}'></span><span>${c.name}</span></div>`).join('')}</div>
+      `
+      document.getElementById('modal').style.display = 'flex'
+    }
+    function closeModal(){document.getElementById('modal').style.display='none'}
+
+    function openQuantityModal(id){
+      selectedProduct = products.find(x=>x.id===id)
+      document.getElementById('quantityTitle').textContent = `طلب ${selectedProduct.name}`
+      document.getElementById('qtyInput').value = 24
+      document.getElementById('quantityModal').style.display = 'flex'
+    }
+    function closeQuantityModal(){document.getElementById('quantityModal').style.display='none'}
+
+    function confirmOrder(){
+      const qty = parseInt(document.getElementById('qtyInput').value)
+      if(isNaN(qty) || qty < 24){
+        alert('الكمية الدنيا للطلب هي 24. يرجى إدخال قيمة صحيحة.')
+        return
+      }
+      const p = selectedProduct
+      const message = `مرحباً، أود طلب ${p.name} (SKU: ${p.sku}) بكمية ${qty}.`
+      const url = `https://wa.me/213558242620?text=${encodeURIComponent(message)}`
+      window.open(url, '_blank')
+      closeQuantityModal()
+    }
+
+    window.addEventListener('keyup',(e)=>{ if(e.key==='Escape'){closeModal();closeQuantityModal()} })
+
+    document.querySelector('.search').addEventListener('input', e=>{
+      const q = e.target.value.trim()
+      if(!q){ render(); return }
+      const filtered = products.filter(p=> (p.name+" "+p.sku).includes(q) || p.colors.some(c=>c.name.includes(q)))
+      catalog.innerHTML = ''
+      filtered.forEach(p=>{
+        const card = document.createElement('article')
+        card.className = 'card'
+        card.innerHTML = `
+          <img src="${p.image}" alt="${p.name}" loading="lazy">
+          <div class="meta">
+            <div>
+              <h3>${p.name}</h3>
+              <div class="sku">SKU: ${p.sku}</div>
+            </div>
+            <div class="price">€ ${p.price.toFixed(2)}</div>
+          </div>
+          <div class="row">
+            <div class="sizes">${p.sizes.slice(0,4).map(s=>`<span class="size">${s}</span>`).join('')}</div>
+            <div style="margin-left:auto" class="swatches">${p.colors.map(c=>`<span title="${c.name}" class="sw" style="background:${c.hex}"></span>`).join('')}</div>
+          </div>
+          <div class="actions">
+            <button class="btn" onclick='openModal(${p.id})'>عرض المقاسات</button>
+            <button class="btn primary" onclick='openQuantityModal(${p.id})'>اطلب الآن</button>
+          </div>
+        `
+        catalog.appendChild(card)
+      })
+    })
+
+    render()
+  </script></body>
+</html>
